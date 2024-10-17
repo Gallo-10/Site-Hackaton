@@ -1,7 +1,13 @@
 import './style.css';
 import React, { useState } from 'react';
+import { useResultImage } from './resultImage';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { collection, addDoc } from 'firebase/firestore';
+import { storage, db } from './firebase.mjs';
+import mime from 'mime'; // Certifique-se de instalar a biblioteca mime-types
+import { v4 } from 'uuid';
 
-const App = () => {
+const App = ({ setResultImage }) => {
     const [files, setFiles] = useState([]);
     const [clicked, setClicked] = useState(false);
 
@@ -24,10 +30,27 @@ const App = () => {
             });
 
             const result = await response.json();
-            console.log('Resultado da predição:', result);
+            console.log('Resultado da predição:', result.latitude);
+            setResultImage(result.image); // Atualiza o resultImage com a imagem base64 recebida
         } catch (error) {
             console.error('Erro ao enviar os arquivos:', error);
         }
+
+
+        try {
+            const contentType = mime.getType(formData.name) || 'application/octet-stream';
+            const storageRef = ref(storage, `images/${v4()}`);
+            const metadata = { contentType };
+            const snapshot = await uploadBytes(storageRef, formData, metadata);
+            console.log('Uploaded a blob or file!', snapshot);
+            const url = await getDownloadURL(snapshot.ref);
+            const valRef = collection(db, 'images');
+            await addDoc(valRef, { Url: url });
+            console.log('File available at', url);
+        } catch (error) {
+            console.error('Error uploading file:', error);
+        }
+
     };
 
     const handleUploadClick = () => {
@@ -67,7 +90,7 @@ const App = () => {
                     Upload
                 </button>
             </div>
-        </header >
+        </header>
     );
 };
 

@@ -11,9 +11,9 @@ const Header = () => {
             <nav>
                 <ul className="nav-links">
                     <li className="link-container"><a className="link" href="#home">Home</a></li>
-                    <li className="link-container"><a className="link" href="#about">About</a></li>
-                    <li className="link-container"><a className="link" href="#services">Services</a></li>
-                    <li className="link-container"><a className="link" href="#contact">Contact</a></li>
+                    <li className="link-container"><a className="link" href="#about">Sobre</a></li>
+                    <li className="link-container"><a className="link" href="#services">Serviços</a></li>
+                    <li className="link-container"><a className="link" href="#contact">Contato</a></li>
                 </ul>
             </nav>
         </header>
