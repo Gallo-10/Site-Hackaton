@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 const App = () => {
     const [files, setFiles] = useState([]);
+    const [clicked, setClicked] = useState(false);
 
     const handleFileChange = (event) => {
         const selectedFiles = event.target.files;
@@ -29,16 +30,27 @@ const App = () => {
         }
     };
 
+    const handleUploadClick = () => {
+        setClicked(true);  // Inicia a animação
+
+        // Remove a animação após 300ms para permitir que ela seja reiniciada em futuros cliques
+        setTimeout(() => {
+            setClicked(false);
+        }, 300);
+
+        // Chama a função de upload
+        uploadFiles();
+    };
 
     return (
         <header className="jjj">
             <div className="uploader-container">
                 <label htmlFor="uploadImgs" className="upload-label">
                     <div className="upload-icon">
-                        <img src="https://img.icons8.com/clouds/100/000000/upload.png" alt="upload icon" />
+                        <img src="https://www.pngplay.com/wp-content/uploads/8/Upload-Icon-Logo-Transparent-PNG.png" alt="upload icon" />
                     </div>
-                    <p>Choose Your Images to Upload</p>
-                    <span>Or Drop Your Images Here</span>
+                    <p>Escolha as imagens para enviar</p>
+                    <span>Ou arraste as imagens aqui</span>
                 </label>
                 <input
                     id="uploadImgs"
@@ -48,9 +60,14 @@ const App = () => {
                     onChange={handleFileChange}
                     className="uploader"
                 />
-                <button className="upload-button" onClick={uploadFiles}>Upload</button>
+                <button
+                    className={`upload-button ${clicked ? 'upload-button-animation' : ''}`}
+                    onClick={handleUploadClick}
+                >
+                    Upload
+                </button>
             </div>
-        </header>
+        </header >
     );
 };
 
